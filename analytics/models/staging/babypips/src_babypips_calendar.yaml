@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: babypips
+    database: stoked-brand-360411
+    schema: analytics
+    tables:
+      - name: babypips_calendar_news
