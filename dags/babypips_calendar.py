@@ -22,7 +22,7 @@ with DAG(
 ) as dag:
     scrape_babypips_calendar = BashOperator(
         task_id="scrape_babypips_calendar",
-        bash_command='cat /Users/fajarabdulkarim/learn/data_engineering/invest-news-api/scripts/babypips_scraper.py',
+        bash_command='cat /Users/fajarabdulkarim/airflow/dags/scripts/babypips_scraper.py',
     )
 
     check_scrape_result = BashOperator(
