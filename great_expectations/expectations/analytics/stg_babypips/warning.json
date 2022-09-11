@@ -1,0 +1,226 @@
+{
+  "data_asset_type": null,
+  "expectation_suite_name": "analytics.stg_babypips.warning",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_columns_to_match_ordered_list",
+      "kwargs": {
+        "column_list": [
+          "id",
+          "news_title",
+          "currency_code",
+          "country",
+          "impact_level",
+          "previous",
+          "forecast",
+          "actual",
+          "previous_class",
+          "actual_class",
+          "revised_previous",
+          "is_all_day",
+          "news_time",
+          "week",
+          "details_source",
+          "details_description",
+          "details_frequency",
+          "details_why_care",
+          "details_expanded",
+          "news_note"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "max_value": 143,
+        "min_value": 143
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "currency_code",
+        "value_set": [
+          "AUD",
+          "CAD",
+          "CHF",
+          "CNY",
+          "EUR",
+          "GBP",
+          "JPY",
+          "NZD",
+          "USD"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "currency_code"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_proportion_of_unique_values_to_be_between",
+      "kwargs": {
+        "column": "currency_code",
+        "max_value": 0.06293706293706294,
+        "min_value": 0.06293706293706294
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_type_list",
+      "kwargs": {
+        "column": "currency_code",
+        "type_list": [
+          "CHAR",
+          "NCHAR",
+          "NTEXT",
+          "NVARCHAR",
+          "STRING",
+          "StringType",
+          "StringType()",
+          "TEXT",
+          "VARCHAR",
+          "dtype('O')",
+          "object",
+          "str",
+          "string"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "impact_level",
+        "value_set": [
+          "high",
+          "low",
+          "med"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "impact_level"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_proportion_of_unique_values_to_be_between",
+      "kwargs": {
+        "column": "impact_level",
+        "max_value": 0.02097902097902098,
+        "min_value": 0.02097902097902098
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_type_list",
+      "kwargs": {
+        "column": "impact_level",
+        "type_list": [
+          "CHAR",
+          "NCHAR",
+          "NTEXT",
+          "NVARCHAR",
+          "STRING",
+          "StringType",
+          "StringType()",
+          "TEXT",
+          "VARCHAR",
+          "dtype('O')",
+          "object",
+          "str",
+          "string"
+        ]
+      },
+      "meta": {}
+    }
+  ],
+  "ge_cloud_id": null,
+  "meta": {
+    "citations": [
+      {
+        "batch_request": {
+          "data_asset_name": "analytics.stg_babypips",
+          "data_connector_name": "default_inferred_data_connector_name",
+          "datasource_name": "big_datasource",
+          "limit": 1000
+        },
+        "citation_date": "2022-09-11T11:11:18.830779Z",
+        "comment": "Created suite added via CLI"
+      }
+    ],
+    "columns": {
+      "actual": {
+        "description": ""
+      },
+      "actual_class": {
+        "description": ""
+      },
+      "country": {
+        "description": ""
+      },
+      "currency_code": {
+        "description": ""
+      },
+      "details_description": {
+        "description": ""
+      },
+      "details_expanded": {
+        "description": ""
+      },
+      "details_frequency": {
+        "description": ""
+      },
+      "details_source": {
+        "description": ""
+      },
+      "details_why_care": {
+        "description": ""
+      },
+      "forecast": {
+        "description": ""
+      },
+      "id": {
+        "description": ""
+      },
+      "impact_level": {
+        "description": ""
+      },
+      "is_all_day": {
+        "description": ""
+      },
+      "news_note": {
+        "description": ""
+      },
+      "news_time": {
+        "description": ""
+      },
+      "news_title": {
+        "description": ""
+      },
+      "previous": {
+        "description": ""
+      },
+      "previous_class": {
+        "description": ""
+      },
+      "revised_previous": {
+        "description": ""
+      },
+      "week": {
+        "description": ""
+      }
+    },
+    "great_expectations_version": "0.15.22"
+  }
+}
