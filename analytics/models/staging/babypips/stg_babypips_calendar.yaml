@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: stg_babypips_calendar
+    description: staging table from babypips scrape result
+    columns: 
+      - name: impact_level
+        tests:
+          - not_null
