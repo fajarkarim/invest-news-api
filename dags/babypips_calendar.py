@@ -1,11 +1,11 @@
 from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
+from airflow.operators.python_operator import PythonOperator
+from airflow.plugins.scripts import babypips_scraper
 
 with DAG(
     "babypips_to_landing",
-    # These args will get passed on to each operator
-    # You can override them on a per-task basis during operator initialization
     default_args={
         'depends_on_past': False,
         'email': ['airflow@example.com'],
@@ -20,14 +20,39 @@ with DAG(
     catchup=False,
     tags=['source_to_landing'],
 ) as dag:
-    scrape_babypips_calendar = BashOperator(
-        task_id="scrape_babypips_calendar",
-        bash_command='cat /Users/fajarabdulkarim/airflow/dags/scripts/babypips_scraper.py',
+
+    def getNextWeekParam( **context):
+        currentDate = context["currentDate"]
+        print(currentDate)
+        currentTime = datetime.strptime(currentDate, "%Y-%m-%d")
+        year, week_num, day = currentTime.isocalendar()
+        nextWeek = week_num + 1
+        nextWeekParam = f"{year}-W{nextWeek}"
+        return nextWeekParam
+    
+    get_week_param = PythonOperator(
+        task_id="get_week_param",
+        python_callable=getNextWeekParam,
+        provide_context=True,
+        op_kwargs={
+            "currentDate" : "{{ ds }}"
+        }
     )
+
+    scrape_babypips_calendar = PythonOperator(
+        task_id="scrape_babypips_calendar",
+        python_callable=babypips_scraper,
+        provide_context=True,
+    )
+
+    # scrape_babypips_calendar = BashOperator(
+    #     task_id="scrape_babypips_calendar",
+    #     bash_command="python /Users/fajarabdulkarim/airflow/dags/scripts/babypips_scraper.py {{ task_instance.xcom_pull(task_ids='get_week_param') }}",
+    # )
 
     check_scrape_result = BashOperator(
         task_id = "check_scrape_result",
-        bash_command ="date"
+        bash_command ="cat /Users/fajarabdulkarim/airflow/dags/scripts/check_file_exist.py {{ task_instance.xcom_pull(task_ids='scrape_babypips_calendar') }}"
     )
 
     upload_to_bigquery = BashOperator(
@@ -45,5 +70,5 @@ with DAG(
         bash_command = "date"
     )
 
-    scrape_babypips_calendar >> check_scrape_result >> upload_to_bigquery >> check_data_source >> stg_calendar_news
+    get_week_param >> scrape_babypips_calendar >> check_scrape_result >> upload_to_bigquery >> check_data_source >> stg_calendar_news
     
