@@ -1,9 +1,15 @@
-from google.cloud import storage
+from fileinput import filename
+import sys
+# from google.cloud import storage
 
 BUCKET_NAME = "baby-pips-calendar-news"
-fileName = "coba.csv"
+fileName = sys.argv[1]
 
-storageClient = storage.Client()
-bucket = storageClient.bucket(BUCKET_NAME)
-fileBlob = bucket.blob(fileName)
-print(fileBlob.exists())
+print(f"nama file nya --------- {fileName}")
+
+# storageClient = storage.Client()
+# bucket = storageClient.bucket(BUCKET_NAME)
+# fileBlob = bucket.blob(fileName)
+
+# if (not fileBlob):
+#     raise ValueError(f"{fileName} doesn't exist")
