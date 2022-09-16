@@ -2,7 +2,8 @@ from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.plugins.scripts import babypips_scraper
+from fajar.invest_news_api.scripts.babypips_scraper import scrape
+from airflow.providers.google.cloud.sensors.gcs import GCSObjectExistenceSensor
 
 with DAG(
     "babypips_to_landing",
@@ -41,8 +42,11 @@ with DAG(
 
     scrape_babypips_calendar = PythonOperator(
         task_id="scrape_babypips_calendar",
-        python_callable=babypips_scraper,
+        python_callable=scrape,
         provide_context=True,
+        op_kwargs={
+            "nextWeekParam" : "{{ task_instance.xcom_pull('get_week_param') }}"
+        }
     )
 
     # scrape_babypips_calendar = BashOperator(
@@ -50,10 +54,18 @@ with DAG(
     #     bash_command="python /Users/fajarabdulkarim/airflow/dags/scripts/babypips_scraper.py {{ task_instance.xcom_pull(task_ids='get_week_param') }}",
     # )
 
-    check_scrape_result = BashOperator(
-        task_id = "check_scrape_result",
-        bash_command ="cat /Users/fajarabdulkarim/airflow/dags/scripts/check_file_exist.py {{ task_instance.xcom_pull(task_ids='scrape_babypips_calendar') }}"
+    check_scrape_result = GCSObjectExistenceSensor(
+        task_id="check_scrape_result",
+        bucket="stoked-brand-360411",
+        object="babypips.com_{{ task_instance.xcom_pull(task_ids='get_week_param') }}",
+        google_cloud_conn_id="gcs_credential",
+        mode='poke',
     )
+
+    # check_scrape_result = BashOperator(
+    #     task_id = "check_scrape_result",
+    #     bash_command ="cat /Users/fajarabdulkarim/airflow/dags/scripts/check_file_exist.py {{ task_instance.xcom_pull(task_ids='scrape_babypips_calendar') }}"
+    # )
 
     upload_to_bigquery = BashOperator(
         task_id = "upload_to_bigquery",
