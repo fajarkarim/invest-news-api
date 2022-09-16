@@ -11,9 +11,12 @@ def getNextWeekParam(currentDate):
     nextWeekParam = f"{year}-W{nextWeek}"
     return nextWeekParam
 
-def scrape(nextWeekParam):
+def scrape(**context):
+    nextWeekParam = context["nextWeekParam"]
     url = "https://www.babypips.com/economic-calendar"
     querystring = {"week": nextWeekParam}
+
+    print(f"printtt {querystring}")
 
     headers = {
         "authority": "www.babypips.com",
@@ -50,6 +53,6 @@ def scrape(nextWeekParam):
     return csvName
 
 if __name__ == "__main__":
-    scrape(sys.argv[1])
+    scrape(nextWeekParam=sys.argv[1])
 
 

@@ -1,4 +1,4 @@
 
 deploy:
 	cp ./dags/babypips_calendar.py /Users/fajarabdulkarim/airflow/dags/
-	cp -r ./dags/scripts /Users/fajarabdulkarim/airflow/dags/btpn/invest_news/
+	cp -r ./scripts /Users/fajarabdulkarim/airflow/plugins/fajar/invest_news_api/

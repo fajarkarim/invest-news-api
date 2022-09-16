@@ -3,7 +3,7 @@ import sys
 # from google.cloud import storage
 
 BUCKET_NAME = "baby-pips-calendar-news"
-fileName = sys.argv[1]
+fileName = f"babypips.com_{sys.argv[1]}"
 
 print(f"nama file nya --------- {fileName}")
 
