@@ -1,6 +1,6 @@
 import requests
-# import pandas as pd
-# import cloud_storage
+import pandas as pd
+import cloud_storage
 import sys
 from datetime import datetime
 
@@ -49,9 +49,9 @@ def scrape(**context):
     for news in events:
         tmp.append(news) 
 
-    # df = pd.json_normalize(tmp)
+    df = pd.json_normalize(tmp)
 
-    # cloud_storage.uploadFromString(BUCKET_NAME, df.to_csv(), csvName)
+    cloud_storage.uploadFromString(BUCKET_NAME, df.to_csv(), csvName)
 
     return csvName
 
