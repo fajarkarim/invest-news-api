@@ -12,6 +12,9 @@ def getNextWeekParam(currentDate):
     return nextWeekParam
 
 def scrape(**context):
+    print("contekkkkk")
+    print(context)
+
     nextWeekParam = context["nextWeekParam"]
     url = "https://www.babypips.com/economic-calendar"
     querystring = {"week": nextWeekParam}

@@ -30,6 +30,9 @@ with DAG(
         nextWeek = week_num + 1
         nextWeekParam = f"{year}-W{nextWeek}"
         return nextWeekParam
+
+    def hello():
+        print("world")        
     
     get_week_param = PythonOperator(
         task_id="get_week_param",
@@ -45,27 +48,17 @@ with DAG(
         python_callable=scrape,
         provide_context=True,
         op_kwargs={
-            "nextWeekParam" : "{{ task_instance.xcom_pull('get_week_param') }}"
+            "nextWeekParam" : "{{ task_instance.xcom_pull(task_ids='get_week_param') }}"
         }
     )
-
-    # scrape_babypips_calendar = BashOperator(
-    #     task_id="scrape_babypips_calendar",
-    #     bash_command="python /Users/fajarabdulkarim/airflow/dags/scripts/babypips_scraper.py {{ task_instance.xcom_pull(task_ids='get_week_param') }}",
-    # )
 
     check_scrape_result = GCSObjectExistenceSensor(
         task_id="check_scrape_result",
         bucket="stoked-brand-360411",
-        object="babypips.com_{{ task_instance.xcom_pull(task_ids='get_week_param') }}",
+        object="{{ task_instance.xcom_pull(task_ids='scrape_babypips_calendar') }}",
         google_cloud_conn_id="gcs_credential",
         mode='poke',
     )
-
-    # check_scrape_result = BashOperator(
-    #     task_id = "check_scrape_result",
-    #     bash_command ="cat /Users/fajarabdulkarim/airflow/dags/scripts/check_file_exist.py {{ task_instance.xcom_pull(task_ids='scrape_babypips_calendar') }}"
-    # )
 
     upload_to_bigquery = BashOperator(
         task_id = "upload_to_bigquery",
