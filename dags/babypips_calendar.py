@@ -2,7 +2,7 @@ from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 from airflow.operators.python_operator import PythonOperator
-from fajar.invest_news_api.scripts.babypips_scraper import scrape
+from fajar.invest_news_api.babypips_scraper import scrape
 from airflow.providers.google.cloud.sensors.gcs import GCSObjectExistenceSensor
 
 with DAG(
