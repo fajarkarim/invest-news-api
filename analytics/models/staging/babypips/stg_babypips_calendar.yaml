@@ -5,5 +5,14 @@ models:
     description: staging table from babypips scrape result
     columns: 
       - name: impact_level
+        description: impact level of the news. Just have three conditions (low, medium, high)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['low', 'medium', 'high']
+      - name: news_title
+        tests:
+          - not_null
+      - name: news_time
         tests:
           - not_null
