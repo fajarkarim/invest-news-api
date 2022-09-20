@@ -1,6 +1,6 @@
 
 import os 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/path/to/file.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/root/gcloud_credential/stoked-brand-360411-bc40ff939c35.json"
 from google.cloud import storage
 
 

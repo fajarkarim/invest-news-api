@@ -1,5 +1,7 @@
 from google.cloud import bigquery
 import sys
+import os
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/root/gcloud_credential/stoked-brand-360411-bc40ff939c35.json"
 
 def uploadCsv(**kwargs):
     csvFileName = kwargs["csvName"]
