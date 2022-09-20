@@ -41,8 +41,8 @@ with DAG(
         }
     )
 
-    scrape_babypips_calendar = PythonOperator(
-        task_id="scrape_babypips_calendar",
+    extract_babypips_calendar = PythonOperator(
+        task_id="extract_babypips_calendar",
         python_callable=scrape,
         provide_context=True,
         op_kwargs={
@@ -53,22 +53,22 @@ with DAG(
     check_scrape_result = GCSObjectExistenceSensor(
         task_id="check_scrape_result",
         bucket="stoked-brand-360411",
-        object="{{ task_instance.xcom_pull(task_ids='scrape_babypips_calendar') }}",
+        object="{{ task_instance.xcom_pull(task_ids='extract_babypips_calendar') }}",
         google_cloud_conn_id="gcs_credential",
         mode='poke',
     )
 
-    upload_to_bigquery = PythonOperator(
-        task_id = "upload_to_bigquery",
+    load_to_bigquery = PythonOperator(
+        task_id = "load_to_bigquery",
         python_callable = uploadCsv,
         provide_context=True,
         op_kwargs={
-            "csvName" : "{{ task_instance.xcom_pull(task_ids='scrape_babypips_calendar') }}"
+            "csvName" : "{{ task_instance.xcom_pull(task_ids='extract_babypips_calendar') }}"
         }
     )
 
-    check_data_source = BashOperator(
-        task_id = "check_data_source",
+    check_stg_data = BashOperator(
+        task_id = "check_stg_data",
         bash_command = "date"
     )
 
@@ -77,5 +77,5 @@ with DAG(
         bash_command = "date"
     )
 
-    get_week_param >> scrape_babypips_calendar >> check_scrape_result >> upload_to_bigquery >> check_data_source >> stg_calendar_news
+    get_week_param >> extract_babypips_calendar >> check_scrape_result >> load_to_bigquery >> stg_calendar_news >> check_stg_data
     
