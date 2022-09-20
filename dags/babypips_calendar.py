@@ -4,7 +4,8 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.python_operator import PythonOperator
 from fajar.invest_news_api.babypips_scraper import scrape
 from fajar.invest_news_api.upload_csv_to_bq import uploadCsv
-from airflow.providers.google.cloud.sensors.gcs import GCSObjectExistenceSensor
+from fajar.invest_news_api.check_file_exist import checkFile
+# from airflow.providers.google.cloud.sensors.gcs import GCSObjectExistenceSensor
 
 with DAG(
     "babypips_to_landing",
@@ -50,13 +51,22 @@ with DAG(
         }
     )
 
-    check_scrape_result = GCSObjectExistenceSensor(
+    check_scrape_result = PythonOperator(
         task_id="check_scrape_result",
-        bucket="stoked-brand-360411",
-        object="{{ task_instance.xcom_pull(task_ids='extract_babypips_calendar') }}",
-        google_cloud_conn_id="gcs_credential",
-        mode='poke',
+        python_callable=checkFile,
+        provide_context=True,
+        op_kwargs={
+            "fileName" : "{{ task_instance.xcom_pull(task_ids='extract_babypips_calendar') }}"
+        }
     )
+
+    # check_scrape_result = GCSObjectExistenceSensor(
+    #     task_id="check_scrape_result",
+    #     bucket="stoked-brand-360411",
+    #     object="{{ task_instance.xcom_pull(task_ids='extract_babypips_calendar') }}",
+    #     google_cloud_conn_id="gcs_credential",
+    #     mode='poke',
+    # )
 
     load_to_bigquery = PythonOperator(
         task_id = "load_to_bigquery",

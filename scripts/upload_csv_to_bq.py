@@ -6,7 +6,7 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/root/gcloud_credential/stoked-bra
 def uploadCsv(**kwargs):
     try:
         csvFileName = kwargs["csvName"]
-        TABLE_NAME = "COBA_AJA"
+        TABLE_NAME = "babypips_calendar_news"
         client = bigquery.Client()
 
         TABLE_ID = f"stoked-brand-360411.web_scraping.{TABLE_NAME}"
