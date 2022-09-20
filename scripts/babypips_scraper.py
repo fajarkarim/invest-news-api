@@ -1,7 +1,8 @@
 import requests
 import pandas as pd
-import cloud_storage
 import sys
+from fajar.invest_news_api.cloud_storage import uploadFromString
+import os
 from datetime import datetime
 
 def getNextWeekParam(currentDate):
@@ -12,8 +13,6 @@ def getNextWeekParam(currentDate):
     return nextWeekParam
 
 def scrape(**context):
-    print("contekkkkk")
-    print(context)
 
     nextWeekParam = context["nextWeekParam"]
     url = "https://www.babypips.com/economic-calendar"
@@ -51,7 +50,7 @@ def scrape(**context):
 
     df = pd.json_normalize(tmp)
 
-    cloud_storage.uploadFromString(BUCKET_NAME, df.to_csv(), csvName)
+    uploadFromString(BUCKET_NAME, df.to_csv(), csvName)
 
     return csvName
 

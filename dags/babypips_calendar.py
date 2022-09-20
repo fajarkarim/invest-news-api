@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 from airflow.operators.python_operator import PythonOperator
 from fajar.invest_news_api.babypips_scraper import scrape
+from fajar.invest_news_api.upload_csv_to_bq import uploadCsv
 from airflow.providers.google.cloud.sensors.gcs import GCSObjectExistenceSensor
 
 with DAG(
@@ -30,9 +31,6 @@ with DAG(
         nextWeek = week_num + 1
         nextWeekParam = f"{year}-W{nextWeek}"
         return nextWeekParam
-
-    def hello():
-        print("world")        
     
     get_week_param = PythonOperator(
         task_id="get_week_param",
@@ -60,9 +58,13 @@ with DAG(
         mode='poke',
     )
 
-    upload_to_bigquery = BashOperator(
+    upload_to_bigquery = PythonOperator(
         task_id = "upload_to_bigquery",
-        bash_command = 'date',
+        python_callable = uploadCsv,
+        provide_context=True,
+        op_kwargs={
+            "csvName" : "{{ task_instance.xcom_pull(task_ids='scrape_babypips_calendar') }}"
+        }
     )
 
     check_data_source = BashOperator(

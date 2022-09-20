@@ -1,5 +1,8 @@
 
+import os 
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/path/to/file.json"
 from google.cloud import storage
+
 
 storage_client = storage.Client()
 
