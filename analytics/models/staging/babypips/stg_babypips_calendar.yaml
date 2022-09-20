@@ -9,7 +9,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['low', 'medium', 'high']
+              values: ['low', 'med', 'high']
       - name: news_title
         tests:
           - not_null
