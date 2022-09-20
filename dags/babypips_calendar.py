@@ -74,7 +74,7 @@ with DAG(
 
     check_stg_data = BashOperator(
         task_id = "check_stg_data",
-        bash_command = "date"
+        bash_command = "source /root/deploy/venv_1/bin/activate && dbt test --project-dir /root/airflow/dags/transform/analytics --select stg_babypips_calendar"
     )
 
     get_week_param >> extract_babypips_calendar >> check_scrape_result >> load_to_bigquery >> stg_calendar_news >> check_stg_data
