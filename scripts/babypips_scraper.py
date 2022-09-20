@@ -18,8 +18,6 @@ def scrape(**context):
     url = "https://www.babypips.com/economic-calendar"
     querystring = {"week": nextWeekParam}
 
-    print(f"printtt {querystring}")
-
     headers = {
         "authority": "www.babypips.com",
         "accept": "application/json",
