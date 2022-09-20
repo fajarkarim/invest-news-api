@@ -67,13 +67,13 @@ with DAG(
         }
     )
 
-    check_stg_data = BashOperator(
-        task_id = "check_stg_data",
-        bash_command = "date"
-    )
-
     stg_calendar_news = BashOperator(
         task_id= "stg_calendar_news",
+        bash_command = "dbt run --project_dir /root/airflow/dags/transform/analytics --select stg_babypips_calendar"
+    )
+
+    check_stg_data = BashOperator(
+        task_id = "check_stg_data",
         bash_command = "date"
     )
 
